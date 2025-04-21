@@ -1,0 +1,78 @@
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches: [main]
+
+env:
+  AWS_REGION: us-east-2
+  TF_VERSION: 1.5.0
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      # 1. Checkout Code
+      - uses: actions/checkout@v3
+
+      # 2. Setup Python
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      # 3. Lint and Test
+      - name: Run Linter
+        run: |
+          pip install flake8
+          flake8 lambda/
+
+      - name: Run Unit Tests
+        run: |
+          cd lambda
+          pip install pytest
+          pytest tests/ -v
+
+      # 4. Package Lambda
+      - name: Package Lambda Function
+        run: |
+          cd lambda
+          pip install -r requirements.txt -t ./package
+          cd package && zip -r ../lambda.zip .
+          cd .. && zip -g lambda.zip app.py
+          mv lambda.zip ../
+
+      # 5. Terraform Deployment
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # 6. SAM Deployment (Optional)
+      - name: Install SAM CLI
+        run: pip install aws-sam-cli
+
+      - name: SAM Deploy
+        run: |
+          sam deploy \
+            --stack-name myapp \
+            --region ${{ env.AWS_REGION }} \
+            --capabilities CAPABILITY_IAM \
+            --no-confirm-changeset
