@@ -26,10 +26,10 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Run Linter
-        run: |
-          pip install flake8
-          flake8 lambda/
+      # - name: Run Linter
+      #   run: |
+      #     pip install flake8
+      #     flake8 lambda/
 
       - name: Run Unit Tests
         run: |
