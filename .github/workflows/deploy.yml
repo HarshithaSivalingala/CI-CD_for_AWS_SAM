@@ -70,7 +70,6 @@ jobs:
       - name: Terraform Apply
         run: cd terraform && terraform apply -auto-approve
      
-
       # - name: Install SAM CLI
       #   run: pip install aws-sam-cli
 
