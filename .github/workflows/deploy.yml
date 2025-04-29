@@ -45,7 +45,8 @@ jobs:
           pip install -r requirements.txt -t ./package
           cd package && zip -r ../lambda.zip .
           cd .. && zip -g lambda.zip app.py
-          mv lambda.zip ../
+          mv lambda.zip ../terraform/
+
 
       - uses: hashicorp/setup-terraform@v2
         with:

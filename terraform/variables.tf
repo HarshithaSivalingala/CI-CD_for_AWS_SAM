@@ -25,5 +25,5 @@ variable "lambda_runtime" {
 variable "lambda_zip_path" {
   description = "Path to the Lambda deployment package"
   type        = string
-  default     = "../lambda.zip"
+  default     = "lambda.zip"
 }
