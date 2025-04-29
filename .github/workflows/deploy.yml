@@ -46,7 +46,7 @@ jobs:
           cd package && zip -r ../lambda.zip .
           cd .. && zip -g lambda.zip app.py
           mv lambda.zip ../
-
+          
       - uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ env.TF_VERSION }}
