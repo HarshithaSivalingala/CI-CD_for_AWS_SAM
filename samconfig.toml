@@ -3,9 +3,8 @@ version = 0.1
 
 [default.deploy.parameters]
 stack_name = "toral-contact-stack"
-s3_bucket = "toral-sam-deploy-bucket"
 template_file = "toral_template.yaml"
 region = "us-east-2"
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
-
+resolve_s3 = true
