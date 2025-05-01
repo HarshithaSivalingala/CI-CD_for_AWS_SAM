@@ -7,18 +7,18 @@ Globals:
     Timeout: 10
     Runtime: python3.9
 
-Resources:
-  UploadBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: toral-sam-upload-bucket
+
+#   UploadBucket:
+#     Type: AWS::S3::Bucket
+#     Properties:
+#       BucketName: toral-sam-upload-bucket
 
   
   # DeployBucket:
   #   Type: AWS::S3::Bucket
   #   Properties:
   #     BucketName: toral-sam-deploy-bucket
-
+Resources:
   ContactFormFunction:
     Type: AWS::Serverless::Function
     Properties:
