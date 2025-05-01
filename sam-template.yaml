@@ -16,11 +16,16 @@ Resources:
       Handler: app.lambda_handler
       CodeUri: sam-backend/
       Events:
-        Api:
+        ContactPost:
           Type: Api
           Properties:
             Path: /contact
             Method: post
+        ContactGet:
+          Type: Api
+          Properties:
+            Path: /contact
+            Method: get
 
 Outputs:
   ContactFormApi:
