@@ -40,7 +40,7 @@ jobs:
           pip install -r requirements.txt -t ./package
           cd package && zip -r ../sam_lambda.zip .
           cd .. && zip -g sam_lambda.zip app.py
-          mv sam_lambda.zip ../awssam/
+          mv sam_lambda.zip ../
 
       - name: Install SAM CLI
         run: |
