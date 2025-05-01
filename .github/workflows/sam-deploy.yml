@@ -1,39 +1,57 @@
-name: Deploy SAM Application
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: SAM Template for serverless Lambda function
 
-on:
-  push:
-    branches: [aws-sam]
+Globals:
+  Function:
+    Timeout: 10
+    Runtime: python3.11
+    MemorySize: 128
 
-permissions:
-  id-token: write
-  contents: read
+Resources:
+  ContactFormFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ContactFormFunction
+      Handler: app.lambda_handler
+      CodeUri: sam-backend/
+      Events:
+        ContactPost:
+          Type: Api
+          Properties:
+            Path: /contact
+            Method: post
+            RestApiId: !Ref ContactFormApiGateway
+            Auth:
+              Authorizer: NONE
+            Cors:
+              AllowMethods: "'OPTIONS,POST,GET'"
+              AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              AllowOrigin: "'*'"
+        ContactGet:
+          Type: Api
+          Properties:
+            Path: /contact
+            Method: get
+            RestApiId: !Ref ContactFormApiGateway
+            Auth:
+              Authorizer: NONE
+            Cors:
+              AllowMethods: "'OPTIONS,POST,GET'"
+              AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              AllowOrigin: "'*'"
 
-jobs:
-  deploy:
-    name: Build and Deploy with SAM
-    runs-on: ubuntu-latest
+  ContactFormApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: ContactFormApi
+      StageName: Prod
+      Cors:
+        AllowMethods: "'OPTIONS,POST,GET'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-
-      - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
-
-      - name: Install AWS SAM CLI
-        uses: aws-actions/setup-sam@v2
-
-      - name: Build SAM application
-        run: sam build --template sam-template.yaml
-
-      - name: Deploy SAM application
-        run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name contact-form-api --capabilities CAPABILITY_IAM --resolve-s3
+Outputs:
+  ContactFormApi:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ContactFormApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/contact"
