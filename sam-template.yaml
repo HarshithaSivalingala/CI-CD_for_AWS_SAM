@@ -55,4 +55,3 @@ Outputs:
   ContactFormApi:
     Description: "API Gateway endpoint URL"
     Value: !Sub "https://${ContactFormApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/contact"
-
