@@ -1,0 +1,6 @@
+.env
+.terraform/
+terraform.tfstate*
+lambda.zip
+node_modules/
+__pycache__/
