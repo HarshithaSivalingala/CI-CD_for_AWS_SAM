@@ -3,6 +3,7 @@ name: "AWS-SAM CI/CD"
 on:
   push:
     branches: [toral_ci-cd-aws-sam]
+  workflow_dispatch:
 
 env:
   AWS_REGION: us-east-2
