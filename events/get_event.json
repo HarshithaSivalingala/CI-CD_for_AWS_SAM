@@ -1,0 +1,12 @@
+{
+  "httpMethod": "GET",
+  "path": "/contact",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "queryStringParameters": {
+    "source": "local"
+  },
+  "body": null,
+  "isBase64Encoded": false
+}

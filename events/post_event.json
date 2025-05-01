@@ -1,0 +1,11 @@
+{
+    "httpMethod": "POST",
+    "path": "/contact",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "queryStringParameters": {},
+    "body": "{\"name\": \"Toral\", \"email\": \"toral@example.com\", \"phone\": \"1234567890\", \"message\": \"Hello from SAM!\"}",
+    "isBase64Encoded": false
+  }
+  
