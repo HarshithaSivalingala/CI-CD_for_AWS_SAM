@@ -30,4 +30,4 @@ jobs:
       - name: Deploy with Serverless
         run: |
           cd lambda
-          sls deploy --stage dev
+          npx serverless deploy --stage dev
