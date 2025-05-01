@@ -8,6 +8,17 @@ Globals:
     Runtime: python3.9
 
 Resources:
+  UploadBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: toral-sam-upload-bucket
+
+  
+  # DeployBucket:
+  #   Type: AWS::S3::Bucket
+  #   Properties:
+  #     BucketName: toral-sam-deploy-bucket
+
   ContactFormFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -26,11 +37,6 @@ Resources:
           Properties:
             Path: /contact
             Method: POST
-
-  UploadBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: toral-sam-upload-bucket
 
   LambdaExecutionRole:
     Type: AWS::IAM::Role
@@ -53,3 +59,5 @@ Outputs:
   APIEndpoint:
     Description: "API Gateway endpoint for Contact Form"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/contact"
+
+

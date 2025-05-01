@@ -55,7 +55,8 @@ jobs:
 
       - name: SAM Deploy
         run: |
-          sam deploy --config-file samconfig.toml --guided --stack-name "toral-contact-stack"
+          sam deploy --config-file samconfig.toml 
+  
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
