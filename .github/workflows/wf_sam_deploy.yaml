@@ -91,7 +91,7 @@ jobs:
         run: |
           cd aws_sam
           echo "Updating contact.html with API Endpoint: $API_ENDPOINT"
-          sed -i "s|{{API_ENDPOINT}}|$API_ENDPOINT|g" contact.html
+          sed -i '' "s|{{API_ENDPOINT}}|$API_ENDPOINT|g" contact.html
         continue-on-error: false
 
       - name: "Step | Upload contact.html to S3"
