@@ -49,5 +49,5 @@ jobs:
             --region $AWS_REGION \
             --capabilities CAPABILITY_IAM \
             --no-fail-on-empty-changeset \
-            --no-confirm-changeset
+            --no-confirm-changeset \
             --resolve-s3
