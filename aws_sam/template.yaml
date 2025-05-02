@@ -9,7 +9,6 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.9
       CodeUri: lambda/
-      MemorySize: 128
       Timeout: 10
       Policies: AWSLambdaBasicExecutionRole
       Events:
@@ -18,3 +17,12 @@ Resources:
           Properties:
             Path: /contact
             Method: ANY
+
+Outputs:
+  LambdaFunctionArn:
+    Description: "The ARN of the Lambda function"
+    Value: !GetAtt ContactFormFunction.Arn
+
+  ApiGatewayEndpoint:
+    Description: "The API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/contact"

@@ -18,11 +18,13 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
+        continue-on-error: false
 
       - name: "Step | Setup Python"
         uses: actions/setup-python@v4
         with:
           python-version: "3.9"
+        continue-on-error: false
 
       - name: "Step | Run PyTest"
         run: |
@@ -30,10 +32,12 @@ jobs:
           cd aws_sam/lambda
           pip install -r requirements.txt
           pytest tests/ -v
+        continue-on-error: false
 
       - name: "Step | AWS SAM CLI"
         run: |
           pip install aws-sam-cli
+        continue-on-error: false
 
       - name: "Step | Setup AWS Creds"
         uses: aws-actions/configure-aws-credentials@v2
@@ -41,39 +45,31 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        continue-on-error: false
 
       - name: "Step | SAM Build"
         run: |
           cd aws_sam
           sam build --use-container
+        continue-on-error: false
 
       - name: "Step | SAM Deploy"
+        id: sam_deploy
         run: |
           cd aws_sam
           sam deploy --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
+        continue-on-error: false
 
-
-      # - name: Package Lambda Function
-      #   run: |
-      #     cd sam_lambda
-      #     pip install -r requirements.txt -t ./package
-      #     cd package && zip -r ../sam_lambda.zip .
-      #     cd .. && zip -g sam_lambda.zip app.py
-      #     mv sam_lambda.zip ../
-
-
-
-
-
-      # - name: SAM Deploy
-      #   run: |
-      #     sam deploy --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
-
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      # - name: Verify Deployment
-      #   run: |
-      #     echo "Testing API endpoint..."
-      #     curl -s "$(awssam output -raw api_gateway_url)" | jq .
+      - name: "Step | Extract API Endpoint"
+        id: extract_api
+        run: |
+          cd aws_sam
+          API_ENDPOINT=$(grep -oP 'https://[a-zA-Z0-9.-]+/Prod/contact' <<< "$(cat samconfig.toml)")
+          echo "API_ENDPOINT=$API_ENDPOINT" >> $GITHUB_ENV
+        continue-on-error: false
+  
+      - name: "Step | Validate API Endpoint"
+        run: |
+          echo "Validating API Endpoint: $API_ENDPOINT"
+          curl -X GET $API_ENDPOINT
+        continue-on-error: false
