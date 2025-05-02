@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: SAM Template for serverless Lambda function
+Description: SAM Template for serverless Lambda function with simplified CORS
 
 Globals:
   Function:
@@ -24,10 +24,6 @@ Resources:
             RestApiId: !Ref ContactFormApiGateway
             Auth:
               Authorizer: NONE
-            Cors:
-              AllowMethods: "'OPTIONS,POST,GET'"
-              AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              AllowOrigin: "'*'"
         ContactGet:
           Type: Api
           Properties:
@@ -36,20 +32,13 @@ Resources:
             RestApiId: !Ref ContactFormApiGateway
             Auth:
               Authorizer: NONE
-            Cors:
-              AllowMethods: "'OPTIONS,POST,GET'"
-              AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-              AllowOrigin: "'*'"
 
   ContactFormApiGateway:
     Type: AWS::Serverless::Api
     Properties:
       Name: ContactFormApi
       StageName: Prod
-      Cors:
-        AllowMethods: "'OPTIONS,POST,GET'"
-        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-        AllowOrigin: "'*'"
+      Cors: true
 
 Outputs:
   ContactFormApi:
