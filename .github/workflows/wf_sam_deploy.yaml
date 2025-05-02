@@ -87,15 +87,29 @@ jobs:
           echo "S3_BUCKET=$S3_BUCKET" >> $GITHUB_ENV
         continue-on-error: false
 
+      - name: "Step | Extract S3 Website Endpoint"
+        id: extract_s3_website
+        run: |
+          S3_WEBSITE_URL=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='S3WebsiteURL'].OutputValue" --output text)
+          echo "S3_WEBSITE_URL=$S3_WEBSITE_URL" >> $GITHUB_ENV
+        continue-on-error: false
+
       - name: "Step | Update contact.html"
         run: |
           cd aws_sam
+          ls aws_sam
           echo "Updating contact.html with API Endpoint: $API_ENDPOINT"
-          sed -i '' "s|{{API_ENDPOINT}}|$API_ENDPOINT|g" contact.html
+          if [ -f "contact.html" ]; then
+            sed -i '' "s|{{API_ENDPOINT}}|$API_ENDPOINT|g" contact.html
+          else
+            echo "Error: contact.html not found in aws_sam directory"
+            exit 1
+          fi
         continue-on-error: false
 
       - name: "Step | Upload contact.html to S3"
         run: |
           echo "Uploading updated contact.html to S3 bucket: $S3_BUCKET"
           aws s3 cp aws_sam/contact.html s3://$S3_BUCKET/contact.html
+          echo "Contact form URL: $S3_WEBSITE_URL"
         continue-on-error: false
