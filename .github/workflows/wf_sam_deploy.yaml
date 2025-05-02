@@ -100,7 +100,7 @@ jobs:
           ls -a
           echo "Updating contact.html with API Endpoint: $API_ENDPOINT"
           if [ -f "contact.html" ]; then
-            sed -i '' "s|{{API_ENDPOINT}}|$API_ENDPOINT|g" contact.html
+            sed -i "s|{{API_ENDPOINT}}|$API_ENDPOINT|g" contact.html
           else
             echo "Error: contact.html not found in aws_sam directory"
             exit 1
