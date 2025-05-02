@@ -6,7 +6,7 @@ from datetime import datetime
 # CORS headers
 BASE_HEADERS = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key',
     'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
 }
 
