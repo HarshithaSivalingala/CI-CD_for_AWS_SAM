@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: SAM Template for serverless Lambda function with simplified CORS
+Description: SAM Template with simple CORS configuration per method
 
 Globals:
   Function:
@@ -24,6 +24,7 @@ Resources:
             RestApiId: !Ref ContactFormApiGateway
             Auth:
               Authorizer: NONE
+            Cors: true
         ContactGet:
           Type: Api
           Properties:
@@ -32,15 +33,10 @@ Resources:
             RestApiId: !Ref ContactFormApiGateway
             Auth:
               Authorizer: NONE
+            Cors: true
 
   ContactFormApiGateway:
     Type: AWS::Serverless::Api
     Properties:
       Name: ContactFormApi
       StageName: Prod
-      Cors: true
-
-Outputs:
-  ContactFormApi:
-    Description: "API Gateway endpoint URL"
-    Value: !Sub "https://${ContactFormApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/contact"
