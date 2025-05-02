@@ -63,11 +63,10 @@ jobs:
       - name: "Step | Extract API Endpoint"
         id: extract_api
         run: |
-          cd aws_sam
-          API_ENDPOINT=$(grep -oP 'https://[a-zA-Z0-9.-]+/Prod/contact' <<< "$(cat samconfig.toml)")
+          API_ENDPOINT=$(aws cloudformation describe-stacks --stack-name t-sam-stack-contact-form --query "Stacks[0].Outputs[?OutputKey=='ApiGatewayEndpoint'].OutputValue" --output text)
           echo "API_ENDPOINT=$API_ENDPOINT" >> $GITHUB_ENV
         continue-on-error: false
-  
+
       - name: "Step | Validate API Endpoint"
         run: |
           echo "Validating API Endpoint: $API_ENDPOINT"
