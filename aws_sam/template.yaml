@@ -18,6 +18,19 @@ Resources:
             Path: /contact
             Method: ANY
 
+  ContactFormS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-bucket"
+      WebsiteConfiguration:
+        IndexDocument: contact.html
+      AccessControl: PublicRead
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
 Outputs:
   LambdaFunctionArn:
     Description: "The ARN of the Lambda function"
@@ -26,3 +39,11 @@ Outputs:
   ApiGatewayEndpoint:
     Description: "The API Gateway endpoint URL"
     Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/contact"
+
+  S3BucketName:
+    Description: "The name of the S3 bucket used for static website hosting"
+    Value: !Ref ContactFormS3Bucket
+
+  S3WebsiteURL:
+    Description: "The URL of the S3 static website"
+    Value: !GetAtt ContactFormS3Bucket.WebsiteURL
