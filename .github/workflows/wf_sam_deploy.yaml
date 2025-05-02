@@ -97,7 +97,7 @@ jobs:
       - name: "Step | Update contact.html"
         run: |
           cd aws_sam
-          ls aws_sam
+          ls -a
           echo "Updating contact.html with API Endpoint: $API_ENDPOINT"
           if [ -f "contact.html" ]; then
             sed -i '' "s|{{API_ENDPOINT}}|$API_ENDPOINT|g" contact.html
