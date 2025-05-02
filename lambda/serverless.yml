@@ -16,14 +16,18 @@ provider:
             - logs:CreateLogStream
             - logs:PutLogEvents
           Resource: "*"
+  httpApi:
+    cors: true # This enables CORS for all endpoints
 
 functions:
   contactFormHandler:
     handler: app.lambda_handler
     events:
       - http:
-          path: contact
+          path: /contact
           method: post
+          cors: true # Explicit CORS for POST
       - http:
-          path: contact
+          path: /contact
           method: get
+          cors: true # Explicit CORS for GET
