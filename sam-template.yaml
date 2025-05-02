@@ -24,14 +24,10 @@ Resources:
             RestApiId: !Ref ContactFormApiGateway
             Auth:
               Authorizer: NONE
-<<<<<<< HEAD
             Cors:
               AllowMethods: "'OPTIONS,POST,GET'"
               AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
               AllowOrigin: "'*'"
-=======
-            Cors: "'*'" 
->>>>>>> cd1c2aef76db10ccc44517ee77070caac2b07800
         ContactGet:
           Type: Api
           Properties:
@@ -40,29 +36,21 @@ Resources:
             RestApiId: !Ref ContactFormApiGateway
             Auth:
               Authorizer: NONE
-<<<<<<< HEAD
             Cors:
               AllowMethods: "'OPTIONS,POST,GET'"
               AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
               AllowOrigin: "'*'"
-=======
-            Cors: "'*'" 
->>>>>>> cd1c2aef76db10ccc44517ee77070caac2b07800
 
   ContactFormApiGateway:
     Type: AWS::Serverless::Api
     Properties:
       Name: ContactFormApi
       StageName: Prod
-<<<<<<< HEAD
       Cors:
         AllowMethods: "'OPTIONS,POST,GET'"
         AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
         AllowOrigin: "'*'"
 
-=======
-   
->>>>>>> cd1c2aef76db10ccc44517ee77070caac2b07800
 Outputs:
   ContactFormApi:
     Description: "API Gateway endpoint URL"
