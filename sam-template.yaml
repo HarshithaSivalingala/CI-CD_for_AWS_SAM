@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: SAM Template with simple CORS configuration per method
+Description: SAM Template with simplified CORS
 
 Globals:
   Function:
@@ -9,6 +9,16 @@ Globals:
     MemorySize: 128
 
 Resources:
+  ContactFormApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: ContactFormApi
+      StageName: Prod
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+        AllowOrigin: "'*'"
+
   ContactFormFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -24,7 +34,6 @@ Resources:
             RestApiId: !Ref ContactFormApiGateway
             Auth:
               Authorizer: NONE
-            Cors: true
         ContactGet:
           Type: Api
           Properties:
@@ -33,10 +42,8 @@ Resources:
             RestApiId: !Ref ContactFormApiGateway
             Auth:
               Authorizer: NONE
-            Cors: true
 
-  ContactFormApiGateway:
-    Type: AWS::Serverless::Api
-    Properties:
-      Name: ContactFormApi
-      StageName: Prod
+Outputs:
+  ContactFormApi:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ContactFormApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/contact"
