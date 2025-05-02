@@ -60,10 +60,17 @@ jobs:
           sam deploy --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
         continue-on-error: false
 
+      - name: "Step | Extract Stack Name"
+        id: extract_stack_name
+        run: |
+          STACK_NAME=$(grep -oP '(?<=stack_name = ").*(?=")' aws_sam/samconfig.toml)
+          echo "STACK_NAME=$STACK_NAME" >> $GITHUB_ENV
+        continue-on-error: false
+
       - name: "Step | Extract API Endpoint"
         id: extract_api
         run: |
-          API_ENDPOINT=$(aws cloudformation describe-stacks --stack-name t-sam-stack-contact-form --query "Stacks[0].Outputs[?OutputKey=='ApiGatewayEndpoint'].OutputValue" --output text)
+          API_ENDPOINT=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='ApiGatewayEndpoint'].OutputValue" --output text)
           echo "API_ENDPOINT=$API_ENDPOINT" >> $GITHUB_ENV
         continue-on-error: false
 
@@ -71,4 +78,24 @@ jobs:
         run: |
           echo "Validating API Endpoint: $API_ENDPOINT"
           curl -X GET $API_ENDPOINT
+        continue-on-error: false
+
+      - name: "Step | Extract S3 Bucket Name"
+        id: extract_s3
+        run: |
+          S3_BUCKET=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[0].Outputs[?OutputKey=='S3BucketName'].OutputValue" --output text)
+          echo "S3_BUCKET=$S3_BUCKET" >> $GITHUB_ENV
+        continue-on-error: false
+
+      - name: "Step | Update contact.html"
+        run: |
+          cd aws_sam
+          echo "Updating contact.html with API Endpoint: $API_ENDPOINT"
+          sed -i "s/{{API_ENDPOINT}}/$API_ENDPOINT/g" contact.html
+        continue-on-error: false
+
+      - name: "Step | Upload contact.html to S3"
+        run: |
+          echo "Uploading updated contact.html to S3 bucket: $S3_BUCKET"
+          aws s3 cp aws_sam/contact.html s3://$S3_BUCKET/contact.html
         continue-on-error: false

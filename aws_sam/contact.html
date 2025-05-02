@@ -70,7 +70,7 @@
       };
 
       try {
-        const res = await fetch("https://zso4fi55wi.execute-api.us-east-1.amazonaws.com/Prod/contact", {
+        const res = await fetch("{{API_ENDPOINT}}", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData)
