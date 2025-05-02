@@ -32,16 +32,12 @@ Resources:
             Path: /contact
             Method: post
             RestApiId: !Ref ContactFormApiGateway
-            Auth:
-              Authorizer: NONE
         ContactGet:
           Type: Api
           Properties:
             Path: /contact
             Method: get
             RestApiId: !Ref ContactFormApiGateway
-            Auth:
-              Authorizer: NONE
 
 Outputs:
   ContactFormApi:
