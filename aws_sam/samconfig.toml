@@ -1,0 +1,11 @@
+version = 0.1
+
+[default.deploy.parameters]
+resolve_s3 = true
+region = "us-east-2"
+disable_rollback = true
+image_repositories = []
+confirm_changeset = false
+capabilities = "CAPABILITY_IAM"
+stack_name = "t-sam-stack-contact-form"
+s3_prefix = "t_contact_form_app/artifacts"

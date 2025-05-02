@@ -1,0 +1,20 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  ContactFormFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: t_sam_func_contact_form
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      CodeUri: lambda/
+      MemorySize: 128
+      Timeout: 10
+      Policies: AWSLambdaBasicExecutionRole
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /contact
+            Method: ANY
