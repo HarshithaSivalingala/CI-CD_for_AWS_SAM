@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 name: Deploy SAM Application
 
 on:
@@ -37,3 +38,62 @@ jobs:
 
       - name: Deploy SAM application
         run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name contact-form-api --capabilities CAPABILITY_IAM --resolve-s3
+=======
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: SAM Template for serverless Lambda function
+
+Globals:
+  Function:
+    Timeout: 10
+    Runtime: python3.11
+    MemorySize: 128
+
+Resources:
+  ContactFormFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ContactFormFunction
+      Handler: app.lambda_handler
+      CodeUri: sam-backend/
+      Events:
+        ContactPost:
+          Type: Api
+          Properties:
+            Path: /contact
+            Method: post
+            RestApiId: !Ref ContactFormApiGateway
+            Auth:
+              Authorizer: NONE
+            Cors:
+              AllowMethods: "'OPTIONS,POST,GET'"
+              AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              AllowOrigin: "'*'"
+        ContactGet:
+          Type: Api
+          Properties:
+            Path: /contact
+            Method: get
+            RestApiId: !Ref ContactFormApiGateway
+            Auth:
+              Authorizer: NONE
+            Cors:
+              AllowMethods: "'OPTIONS,POST,GET'"
+              AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              AllowOrigin: "'*'"
+
+  ContactFormApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: ContactFormApi
+      StageName: Prod
+      Cors:
+        AllowMethods: "'OPTIONS,POST,GET'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+
+Outputs:
+  ContactFormApi:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ContactFormApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/contact"
+>>>>>>> cd1c2aef76db10ccc44517ee77070caac2b07800
