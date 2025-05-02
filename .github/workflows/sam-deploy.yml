@@ -42,12 +42,30 @@ jobs:
       - name: Build SAM application
         run: sam build --template sam-template.yaml
 
-      - name: Deploy SAM application
+      - name: Clean Up Stuck Stack
+        run: |
+          aws cloudformation continue-update-rollback \
+            --stack-name contact-form-api \
+            --region us-east-2 || true
+
+          sleep 120
+          aws cloudformation describe-stacks \
+            --stack-name contact-form-api \
+            --query 'Stacks[0].StackStatus' \
+            --output text | grep -q 'UPDATE_ROLLBACK_FAILED' && \
+          aws cloudformation delete-stack \
+            --stack-name contact-form-api \
+            --region us-east-2
+
+          aws cloudformation wait stack-delete-complete \
+            --stack-name contact-form-api \
+            --region us-east-2 || true
+
+      - name: Deploy Fresh
         run: |
           sam deploy \
             --stack-name contact-form-api \
             --region us-east-2 \
             --capabilities CAPABILITY_IAM \
-            --no-fail-on-empty-changeset \
             --resolve-s3 \
             --force-upload
