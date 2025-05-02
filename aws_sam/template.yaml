@@ -24,12 +24,24 @@ Resources:
       BucketName: !Sub "${AWS::StackName}-bucket"
       WebsiteConfiguration:
         IndexDocument: contact.html
-      AccessControl: PublicRead
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
         IgnorePublicAcls: false
         RestrictPublicBuckets: false
+
+  ContactFormS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ContactFormS3Bucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "${ContactFormS3Bucket.Arn}/*"
 
 Outputs:
   LambdaFunctionArn:
