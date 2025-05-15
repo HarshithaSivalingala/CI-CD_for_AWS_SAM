@@ -1,11 +1,7 @@
 
 # CI/CD for AWS Serverless Applications
 
-This project demonstrates three CI/CD approaches to deploying AWS Serverless applications using:
-
-- **Terraform**
-- **AWS SAM (Serverless Application Model)**
-- **Serverless Framework**
+This repository demonstrates **CI/CD pipelines** using tools like **Terraform**, **AWS SAM**, and **Serverless Framework**. It also includes a **React frontend** (`react-frontend` branch) that connects to all backend deployments.
 
 Each setup integrates **GitHub Actions** for CI/CD automation and includes a React frontend connected to a Lambda backend via API Gateway.
 
@@ -13,24 +9,18 @@ Each setup integrates **GitHub Actions** for CI/CD automation and includes a Rea
 
 ##  Branch Overview
 
-| Branch                  | Stack Used                | Description                                                   |
-|-------------------------|---------------------------|---------------------------------------------------------------|
-| `main`                  | Terraform                 | Infra setup using Terraform for Lambda, API Gateway, S3, etc. |
-| `aws-sam`               | AWS SAM                   | SAM template-based CI/CD for Lambda and API Gateway           |
-| `serverless-framework`  | Serverless Framework      | Deploys using `serverless.yml` and GitHub Actions             |
+| Branch Name            | Description                                                         |
+|------------------------|---------------------------------------------------------------------|
+| `terraform`            | Backend deployment using **Terraform**                              |
+| `aws-sam`              | Backend deployment using **AWS Serverless Application Model (SAM)** |
+| `serverlessframework`  | Backend deployment using **Serverless Framework**                   |
+| `react-frontend`       | React app that communicates with all deployed backends              |
+
 
 ---
+## React Frontend (`react-frontend` branch)
 
-## Project Structure
-
-```plaintext
-.github/workflows/        # GitHub Actions CI/CD pipelines
-lambda-react-frontend/    # React app frontend (deployed via S3/CloudFront)
-lambda/ or sam-backend/   # Lambda function code (Node.js/Python)
-terraform/                # Terraform modules (main branch only)
-sam-template.yaml         # SAM template (aws-sam branch)
-serverless.yml            # Serverless Framework config (serverless-framework branch)
-```
+The `react-frontend` branch contains a **React application** that interacts with backend services deployed via different CI/CD tools. API endpoints are configured via environment variables.
 
 ---
 
@@ -44,7 +34,7 @@ serverless.yml            # Serverless Framework config (serverless-framework br
 
 ---
 
-## How to Deploy
+## How to Deploy Each Tool seperately
 
 ### 1. Terraform (main branch)
 
@@ -68,6 +58,12 @@ npm install -g serverless
 sls deploy
 ```
 
+### 4. react-frontend
+
+```bash
+npm install
+npm start
+```
 ---
 
 ## Security & Quality
